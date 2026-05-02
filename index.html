@@ -1,256 +1,1600 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Portfolio of Shyamsunder Merugu, Azure Data Engineer with about 4 years of experience in Databricks, PySpark, Microsoft Fabric, AWS, and modern lakehouse engineering." />
-  <meta name="keywords" content="Shyamsunder Merugu, Azure Data Engineer, Databricks, PySpark, Microsoft Fabric, AWS, dbt, Apache Iceberg, Delta Lake" />
-  <meta name="author" content="Shyamsunder Merugu" />
-  <title>Shyamsunder Merugu | Azure Data Engineer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shyam · Azure Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --az: #0078D4;
+    --az-bright: #00B4FF;
+    --az-dim: #003A6B;
+    --bg: #060C14;
+    --bg2: #0A1626;
+    --bg3: #0F1E33;
+    --surface: #112240;
+    --border: rgba(0,180,255,0.15);
+    --border-hot: rgba(0,180,255,0.5);
+    --text: #CDD9EF;
+    --text-dim: #5A7A9E;
+    --text-bright: #E8F2FF;
+    --mono: 'Share Tech Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'DM Sans', sans-serif;
+    --glow: 0 0 20px rgba(0,180,255,0.2);
+    --glow-hot: 0 0 30px rgba(0,180,255,0.4);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--az-bright);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    box-shadow: 0 0 12px var(--az-bright);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0,180,255,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.15s, width 0.2s, height 0.2s;
+  }
+
+  /* CANVAS */
+  #pipeline-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(6,12,20,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--az-bright);
+    letter-spacing: 0.1em;
+  }
+  .nav-logo span { color: var(--text-dim); }
+
+  nav ul {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--az-bright); }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #00FF88;
+  }
+  .status-dot {
+    width: 6px; height: 6px;
+    background: #00FF88;
+    border-radius: 50%;
+    animation: pulse-green 2s infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,136,0.4); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 6px rgba(0,255,136,0); }
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+  }
+
+  .hero-inner {
+    max-width: 800px;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--az-bright);
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--az-bright);
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 8vw, 6.5rem);
+    font-weight: 800;
+    line-height: 0.92;
+    color: var(--text-bright);
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+  }
+
+  h1 .accent {
+    color: var(--az);
+    -webkit-text-stroke: 2px var(--az);
+    color: transparent;
+    display: block;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    padding: 0.9rem 2rem;
+    background: var(--az);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover {
+    background: var(--az-bright);
+    box-shadow: var(--glow-hot);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    padding: 0.9rem 2rem;
+    background: transparent;
+    color: var(--az-bright);
+    border: 1px solid var(--border-hot);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+  .btn-ghost:hover {
+    background: rgba(0,180,255,0.05);
+    box-shadow: var(--glow);
+    transform: translateY(-2px);
+  }
+
+  /* HERO TERMINAL */
+  .hero-terminal {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 360px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    background: var(--bg3);
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .t-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .t-dot:nth-child(1) { background: #FF5F57; }
+  .t-dot:nth-child(2) { background: #FEBC2E; }
+  .t-dot:nth-child(3) { background: #28C840; }
+  .terminal-title {
+    margin-left: auto;
+    margin-right: auto;
+    color: var(--text-dim);
+    font-size: 11px;
+  }
+
+  .terminal-body {
+    padding: 1rem;
+    line-height: 2;
+  }
+  .t-prompt { color: var(--az-bright); }
+  .t-cmd { color: var(--text); }
+  .t-comment { color: var(--text-dim); }
+  .t-string { color: #7EC8E3; }
+  .t-success { color: #00FF88; }
+  .t-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--az-bright);
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* SECTION HEADERS */
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--az-bright);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-line {
+    width: 60px;
+    height: 2px;
+    background: var(--az);
+    margin: 0 auto;
+    position: relative;
+  }
+  .section-line::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--az-bright);
+    opacity: 0.3;
+    filter: blur(3px);
+  }
+
+  /* ABOUT */
+  #about {
+    padding: 8rem 10%;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .about-avatar-wrap {
+    position: relative;
+  }
+
+  .about-avatar {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--display);
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--az);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-avatar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--az), var(--az-bright), var(--az));
+    background-size: 200%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .avatar-grid {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,180,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,255,0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  .about-badges {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .badge {
+    background: var(--surface);
+    border: 1px solid var(--border-hot);
+    padding: 8px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--az-bright);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--glow);
+  }
+
+  .badge-icon {
+    width: 18px; height: 18px;
+    fill: var(--az-bright);
+  }
+
+  .about-text p {
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-text p strong {
+    color: var(--text-bright);
+    font-weight: 500;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 2.5rem;
+    border: 1px solid var(--border);
+  }
+
+  .stat {
+    background: var(--bg2);
+    padding: 1.25rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--az-bright);
+    display: block;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* SKILLS */
+  #skills {
+    padding: 8rem 10%;
+    background: linear-gradient(to bottom, transparent, var(--bg2), transparent);
+  }
+
+  .skills-pipeline {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pipeline-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+
+  .pipeline-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    padding: 0.5rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-right: none;
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pipeline-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+    flex: 1;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-card {
+    background: var(--bg2);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: background 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--az);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .skill-card:hover {
+    background: var(--surface);
+    box-shadow: inset 0 0 30px rgba(0,180,255,0.04);
+  }
+
+  .skill-card:hover::after {
+    transform: scaleX(1);
+  }
+
+  .skill-logo {
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .skill-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-bright);
+  }
+
+  .skill-level {
+    display: flex;
+    gap: 3px;
+    margin-top: auto;
+  }
+
+  .skill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--az-dim);
+  }
+  .skill-dot.filled { background: var(--az-bright); box-shadow: 0 0 5px var(--az-bright); }
+
+  .skill-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  /* PROJECTS */
+  #projects {
+    padding: 8rem 10%;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-card:hover {
+    border-color: var(--border-hot);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 20px rgba(0,180,255,0.1);
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--az), var(--az-bright));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .project-title {
+    font-family: var(--display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .project-desc {
+    font-size: 0.92rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  .project-arch {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+
+  .arch-node {
+    background: var(--surface);
+    color: var(--az-bright);
+    padding: 3px 8px;
+    border: 1px solid rgba(0,180,255,0.2);
+    white-space: nowrap;
+  }
+
+  .arch-arrow {
+    color: var(--az-dim);
+  }
+
+  .project-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--az-bright);
+    background: rgba(0,120,212,0.1);
+    border: 1px solid rgba(0,120,212,0.2);
+    padding: 3px 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* EXPERIENCE */
+  #experience {
+    padding: 8rem 10%;
+    background: linear-gradient(to bottom, transparent, var(--bg2), transparent);
+  }
+
+  .timeline {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 140px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border-hot), var(--border-hot), transparent);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 2.5rem;
+    margin-bottom: 3.5rem;
+    position: relative;
+  }
+
+  .timeline-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--az-bright);
+    text-align: right;
+    padding-top: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 132px;
+    top: 6px;
+    width: 16px; height: 16px;
+    border: 2px solid var(--az);
+    background: var(--bg);
+    transform: rotate(45deg);
+    box-shadow: 0 0 12px rgba(0,180,255,0.4);
+  }
+
+  .timeline-content {
+    padding: 1.5rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    position: relative;
+  }
+
+  .timeline-role {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    margin-bottom: 4px;
+  }
+
+  .timeline-company {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--az-bright);
+    margin-bottom: 1rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+  }
+
+  .timeline-desc li {
+    margin-bottom: 6px;
+    padding-left: 1rem;
+    position: relative;
+  }
+  .timeline-desc li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--az);
+  }
+
+  /* CERTIFICATIONS */
+  #certifications {
+    padding: 6rem 10%;
+  }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cert-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cert-card:hover {
+    border-color: var(--border-hot);
+    box-shadow: var(--glow);
+  }
+
+  .cert-badge-icon {
+    font-size: 2rem;
+    margin-bottom: 4px;
+  }
+
+  .cert-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-bright);
+    line-height: 1.4;
+  }
+
+  .cert-issuer {
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .cert-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #00FF88;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: auto;
+  }
+
+  /* CONTACT */
+  #contact {
+    padding: 8rem 10%;
+    text-align: center;
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-inner h2 {
+    margin-bottom: 1rem;
+  }
+
+  .contact-inner p {
+    color: var(--text-dim);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .contact-link {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border);
+    transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .contact-link:hover {
+    color: var(--az-bright);
+    border-color: var(--border-hot);
+    box-shadow: var(--glow);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 2rem 10%;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  footer p {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  footer .footer-az {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--az);
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* SCANLINES overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 200;
+  }
+
+  /* GRID OVERLAY */
+  .grid-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(rgba(0,180,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,180,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    #hero { padding: 0 6%; padding-top: 5rem; }
+    .hero-terminal { display: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .timeline::before { left: 0; }
+    .timeline-item { grid-template-columns: 1fr; }
+    .timeline-date { text-align: left; }
+    .timeline-dot { display: none; }
+    #about, #skills, #projects, #experience, #certifications, #contact { padding: 5rem 6%; }
+  }
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <nav class="nav container" aria-label="Main navigation">
-      <a class="brand" href="#top" aria-label="Go to top">
-        <span class="brand-mark">SM</span>
-        <span>Shyamsunder Merugu</span>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<canvas id="pipeline-canvas"></canvas>
+<div class="grid-overlay"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>// </span>SHYAM.DEV</div>
+  <ul>
+    <li><a href="#about">about</a></li>
+    <li><a href="#skills">skills</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    PIPELINES RUNNING
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag reveal">AZURE DATA ENGINEER · HYDERABAD, IN</div>
+    <h1 class="reveal">
+      Building<br>
+      <span class="accent">Azure</span>
+      Pipelines
+    </h1>
+    <p class="hero-desc reveal">
+      Designing and building enterprise-grade data platforms on Azure — from raw ingestion to analytics-ready datasets that power decisions at scale.
+    </p>
+    <div class="hero-cta reveal">
+      <a href="#projects" class="btn-primary">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        View Projects
       </a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
-      <div class="nav-links" id="navLinks">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-        <a href="#certifications">Certifications</a>
-        <a href="#contact" class="nav-cta">Contact</a>
-      </div>
-    </nav>
-  </header>
-
-  <main id="top">
-    <section class="hero section">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Azure Data Engineer • Databricks • Lakehouse Platforms</p>
-          <h1>Building scalable data pipelines, lakehouse platforms, and cloud analytics systems.</h1>
-          <p class="hero-subtitle">
-            I design and support production-grade data engineering solutions using Azure Data Factory, Databricks, PySpark, SQL, AWS, Hadoop ecosystem, and modern open table formats, with about 4 years of focused data engineering experience.
-          </p>
-          <div class="hero-actions">
-            <a class="btn primary" href="#projects">View Work</a>
-            <a class="btn secondary" href="mailto:Shyamala.merugu99@gmail.com">Email Me</a>
-          </div>
-          <div class="hero-stats" aria-label="Profile highlights">
-            <div><strong>~4 yrs</strong><span>Data engineering experience</span></div>
-            <div><strong>Big Data</strong><span>Spark, Hadoop, Hive, Kafka, NiFi</span></div>
-            <div><strong>Lakehouse</strong><span>Databricks, Delta, Iceberg, Fabric</span></div>
-          </div>
-        </div>
-        <aside class="hero-card" aria-label="Profile card">
-          <div class="avatar">SM</div>
-          <h2>Shyamsunder Merugu</h2>
-          <p>Azure Data Engineer</p>
-          <ul class="profile-list">
-            <li><span>Location</span><strong>India</strong></li>
-            <li><span>Email</span><strong><a href="mailto:Shyamala.merugu99@gmail.com">Shyamala.merugu99@gmail.com</a></strong></li>
-            <li><span>Focus</span><strong>Cloud Data Platforms</strong></li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <section id="about" class="section alt">
-      <div class="container two-col">
-        <div>
-          <p class="section-kicker">About</p>
-          <h2>Data engineer focused on reliable pipelines and practical platform outcomes.</h2>
-        </div>
-        <div class="rich-text">
-          <p>
-            I work across data engineering and cloud services with about 4 years of hands-on experience in Azure Data Lake Storage Gen2, Azure Data Factory, Databricks, PySpark, SQL, Hadoop, Hive, Spark, Kafka, NiFi, AWS Glue, Lambda, S3, Redshift, and PostgreSQL.
-          </p>
-          <p>
-            My strongest value is converting source-system complexity into clean ingestion, transformation, quality, and reporting layers that business users and downstream systems can trust.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="skills" class="section">
-      <div class="container">
-        <div class="section-heading">
-          <p class="section-kicker">Skills & Tools</p>
-          <h2>Modern data stack with strong Spark and cloud fundamentals.</h2>
-        </div>
-        <div class="skills-grid">
-          <article class="skill-card">
-            <h3>Cloud & Lakehouse</h3>
-            <p>Azure, ADLS Gen2, ADF, Databricks, Unity Catalog concepts, Microsoft Fabric, AWS S3, Glue, Lambda, Redshift.</p>
-          </article>
-          <article class="skill-card">
-            <h3>Processing & Engineering</h3>
-            <p>PySpark, Spark SQL, Python, SQL, Scala basics, Linux shell scripting, batch and streaming-oriented ingestion.</p>
-          </article>
-          <article class="skill-card">
-            <h3>Big Data Ecosystem</h3>
-            <p>HDFS, YARN, Hive, HBase, Sqoop, MapReduce, Pig, Kafka, NiFi, Cassandra, ELK.</p>
-          </article>
-          <article class="skill-card">
-            <h3>Data Modeling & Quality</h3>
-            <p>Medallion-style layers, ingestion validation, transformation rules, reporting datasets, star-schema thinking.</p>
-          </article>
-          <article class="skill-card">
-            <h3>Modern Table Formats</h3>
-            <p>Delta Lake, Apache Iceberg, lakehouse optimization concepts, schema evolution, partitioning, and performance tuning.</p>
-          </article>
-          <article class="skill-card">
-            <h3>Analytics Engineering</h3>
-            <p>dbt fundamentals, modular SQL, reusable transformations, CI/CD awareness, VS Code, Git, PostgreSQL, MySQL.</p>
-          </article>
-        </div>
-        <div class="tool-cloud" aria-label="Tool keywords">
-          <span>Databricks</span><span>PySpark</span><span>ADF</span><span>ADLS Gen2</span><span>Microsoft Fabric</span><span>DP-700</span><span>AWS</span><span>dbt</span><span>Apache Iceberg</span><span>Delta Lake</span><span>Kafka</span><span>NiFi</span><span>Hive</span><span>SQL</span><span>Python</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="experience" class="section alt">
-      <div class="container">
-        <div class="section-heading">
-          <p class="section-kicker">Experience</p>
-          <h2>About 4 years of focused data engineering delivery across cloud, lakehouse, and big data workloads.</h2>
-        </div>
-        <div class="timeline">
-          <article class="timeline-item">
-            <div class="timeline-date">Apr 2024 – Present</div>
-            <div class="timeline-body">
-              <h3>Azure Data Engineer — Maslo Consulting Pvt Ltd / ASDA, UK</h3>
-              <p>Designing and supporting data migration and cloud analytics workloads using Azure Cloud, ADLS Gen2, ADF, Databricks, PySpark, and SQL.</p>
-            </div>
-          </article>
-          <article class="timeline-item">
-            <div class="timeline-date">Sep 2022 – Mar 2024</div>
-            <div class="timeline-body">
-              <h3>Azure Data Engineer — Sugansa Solutions Pvt Ltd / ASDA, UK</h3>
-              <p>Built ingestion, quality, transformation, and persistence layers; developed Spark SQL applications and workflow automation scripts.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" class="section">
-      <div class="container">
-        <div class="section-heading with-filter">
-          <div>
-            <p class="section-kicker">Selected Work</p>
-            <h2>Representative data engineering work aligned to a 4-year profile.</h2>
-          </div>
-          <div class="filters" aria-label="Project filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="azure">Azure</button>
-            <button class="filter-btn" data-filter="aws">AWS</button>
-            <button class="filter-btn" data-filter="bigdata">Big Data</button>
-          </div>
-        </div>
-        <div class="project-grid">
-          <article class="project-card" data-category="azure bigdata">
-            <span class="project-tag">Azure / Databricks</span>
-            <h3>Data Migration & Lakehouse Processing</h3>
-            <p>Implemented PySpark-based data processing layers for ingestion, data quality, transformation, persistence, and reporting on Azure data platforms.</p>
-            <ul>
-              <li>ADF orchestration and Databricks transformations</li>
-              <li>Spark SQL reporting datasets</li>
-              <li>Workflow automation and integration scripts</li>
-            </ul>
-          </article>
-          <article class="project-card" data-category="bigdata">
-            <span class="project-tag">Banking Analytics</span>
-            <h3>Retail Data Analytics Platform</h3>
-            <p>Worked on high-volume retail analytics patterns using HDFS, Hive, HBase, Spark, Scala, Kafka, NiFi, and ELK.</p>
-            <ul>
-              <li>NiFi templates and Kafka configurations</li>
-              <li>Real-time data processing patterns</li>
-              <li>Hive and HBase serving layers</li>
-            </ul>
-          </article>
-          <article class="project-card" data-category="aws">
-            <span class="project-tag">AWS / Healthcare</span>
-            <h3>One Data Platform Migration</h3>
-            <p>Built cloud data migration components using AWS S3, Glue, Lambda, Redshift, PySpark, Python, and PostgreSQL.</p>
-            <ul>
-              <li>PySpark scripts with Spark SQL features</li>
-              <li>AWS Glue dynamic frame loading</li>
-              <li>CSV and Parquet processing at scale</li>
-            </ul>
-          </article>
-          <article class="project-card" data-category="bigdata">
-            <span class="project-tag">Insurance / XML Processing</span>
-            <h3>XML Validation & Hive Reporting</h3>
-            <p>Developed Spark-based validation and transformation components for XML feeds and reporting-ready datasets.</p>
-            <ul>
-              <li>RDBMS to HDFS/Hive ingestion</li>
-              <li>Spark JDBC and complex HiveQL</li>
-              <li>End-to-end workflow scripts</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="certifications" class="section alt">
-      <div class="container">
-        <div class="section-heading">
-          <p class="section-kicker">Certifications</p>
-          <h2>Cloud, lakehouse, and generative AI certification roadmap.</h2>
-          <p class="muted">Replace the included SVG badge placeholders with your official badge images when available.</p>
-        </div>
-        <div class="cert-grid">
-          <article class="cert-card">
-            <img src="assets/certifications/dp700.svg" alt="Microsoft DP-700 Fabric Data Engineer Associate certification badge" />
-            <h3>DP-700: Microsoft Fabric Data Engineer Associate</h3>
-            <p>Fabric lakehouse, data pipelines, semantic model readiness, and analytics engineering on Microsoft Fabric.</p>
-          </article>
-          <article class="cert-card">
-            <img src="assets/certifications/aws-cloud-practitioner.svg" alt="AWS Certified Cloud Practitioner badge" />
-            <h3>AWS Certified Cloud Practitioner</h3>
-            <p>Cloud fundamentals across compute, storage, networking, security, billing, and shared responsibility.</p>
-          </article>
-          <article class="cert-card">
-            <img src="assets/certifications/databricks-genai.svg" alt="Databricks Generative AI Engineer Associate certification badge" />
-            <h3>Databricks Generative AI Engineer Associate</h3>
-            <p>Lakehouse AI, vector search concepts, model-serving workflows, and practical generative AI engineering.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section contact-section">
-      <div class="container contact-card">
-        <div>
-          <p class="section-kicker">Contact</p>
-          <h2>Need a data engineer for Azure, Databricks, Fabric, or AWS data work?</h2>
-          <p>Reach out for data engineering, migration, lakehouse implementation, and analytics platform opportunities.</p>
-        </div>
-        <div class="contact-actions">
-          <a class="btn primary" href="mailto:Shyamala.merugu99@gmail.com">Shyamala.merugu99@gmail.com</a>
-          <a class="btn secondary" href="https://www.linkedin.com/" target="_blank" rel="noreferrer">Update LinkedIn URL</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>© <span id="year"></span> Shyamsunder Merugu. Built for GitHub Pages.</p>
-      <a href="#top">Back to top ↑</a>
+      <a href="#contact" class="btn-ghost">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Get In Touch
+      </a>
     </div>
-  </footer>
+  </div>
 
-  <script src="script.js"></script>
+  <div class="hero-terminal reveal">
+    <div class="terminal-bar">
+      <div class="t-dot"></div>
+      <div class="t-dot"></div>
+      <div class="t-dot"></div>
+      <div class="terminal-title">adf_pipeline · bash</div>
+    </div>
+    <div class="terminal-body" id="terminal-output">
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <div class="section-num">01 / ABOUT</div>
+    <h2>Who I Am</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-avatar-wrap reveal">
+      <div class="about-avatar">
+        <div class="avatar-grid"></div>
+        <span style="position:relative;z-index:1">SY</span>
+      </div>
+      <div class="about-badges">
+        <div class="badge">
+          <svg class="badge-icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          ADF · Synapse
+        </div>
+        <div class="badge">
+          <svg class="badge-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          3+ YRS EXP
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text reveal">
+      <p>I'm <strong>Shyam</strong>, an Azure Data Engineer who architects end-to-end data solutions on Microsoft Azure. I specialize in transforming raw, messy data into governed, analytics-ready pipelines that fuel BI dashboards and ML models.</p>
+      <p>My work spans the full data stack — ingestion via <strong>ADF & Event Hubs</strong>, transformation with <strong>Azure Databricks & dbt</strong>, storage in <strong>ADLS Gen2</strong>, and serving through <strong>Synapse Analytics</strong> and <strong>Power BI</strong>.</p>
+      <p>I believe data engineering is fundamentally about trust — building systems that deliver the right data at the right time, every time.</p>
+
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">15+</span>
+          <span class="stat-label">Pipelines Built</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">5TB+</span>
+          <span class="stat-label">Data Processed</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">3</span>
+          <span class="stat-label">Certifications</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <div class="section-num">02 / SKILLS</div>
+    <h2>Tech Stack</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-pipeline">
+
+    <div class="pipeline-row reveal">
+      <div class="pipeline-label">INGEST</div>
+      <div class="pipeline-cards">
+        <div class="skill-card">
+          <div class="skill-logo">🔄</div>
+          <div class="skill-name">Azure Data Factory</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+          </div>
+          <div class="skill-tag">ETL Orchestration</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">📡</div>
+          <div class="skill-name">Event Hubs</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Streaming Ingestion</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🌊</div>
+          <div class="skill-name">IoT Hub</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Device Streams</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">📦</div>
+          <div class="skill-name">REST / APIs</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Source Connectors</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-row reveal">
+      <div class="pipeline-label">STORE</div>
+      <div class="pipeline-cards">
+        <div class="skill-card">
+          <div class="skill-logo">🗄️</div>
+          <div class="skill-name">ADLS Gen2</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+          </div>
+          <div class="skill-tag">Data Lake</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🏦</div>
+          <div class="skill-name">Azure SQL DB</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Relational Storage</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">⚡</div>
+          <div class="skill-name">Cosmos DB</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">NoSQL · Multi-Model</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">📊</div>
+          <div class="skill-name">Delta Lake</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Lakehouse Format</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-row reveal">
+      <div class="pipeline-label">TRANSFORM</div>
+      <div class="pipeline-cards">
+        <div class="skill-card">
+          <div class="skill-logo">🔥</div>
+          <div class="skill-name">Azure Databricks</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+          </div>
+          <div class="skill-tag">Spark · PySpark</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🐍</div>
+          <div class="skill-name">Python / PySpark</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+          </div>
+          <div class="skill-tag">Data Engineering</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🔷</div>
+          <div class="skill-name">dbt</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">SQL Transformation</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🔵</div>
+          <div class="skill-name">Synapse Analytics</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Analytics Platform</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pipeline-row reveal">
+      <div class="pipeline-label">SERVE</div>
+      <div class="pipeline-cards">
+        <div class="skill-card">
+          <div class="skill-logo">📈</div>
+          <div class="skill-name">Power BI</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">BI & Reporting</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">⚙️</div>
+          <div class="skill-name">Azure DevOps</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">CI/CD · IaC</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🏗️</div>
+          <div class="skill-name">Terraform</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Infrastructure as Code</div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-logo">🔒</div>
+          <div class="skill-name">Purview / Governance</div>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot filled"></div><div class="skill-dot"></div><div class="skill-dot"></div>
+          </div>
+          <div class="skill-tag">Data Catalog</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <div class="section-num">03 / PROJECTS</div>
+    <h2>Featured Work</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-num">PROJECT_01</div>
+      <div class="project-title">Real-Time Sales Analytics Platform</div>
+      <p class="project-desc">Built an end-to-end streaming pipeline processing 500K+ transactions/day. Medallion architecture (Bronze → Silver → Gold) on Delta Lake with sub-2-minute latency from POS to Power BI dashboard.</p>
+      <div class="project-arch">
+        <span class="arch-node">Event Hubs</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Databricks</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Delta Lake</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Synapse</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Power BI</span>
+      </div>
+      <div class="project-tags">
+        <span class="tag">PySpark</span><span class="tag">Structured Streaming</span><span class="tag">Delta Lake</span><span class="tag">Medallion</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">PROJECT_02</div>
+      <div class="project-title">Enterprise Data Lakehouse Migration</div>
+      <p class="project-desc">Migrated legacy on-prem SQL Server DWH to Azure Synapse Lakehouse. Reduced query time by 70%, cut storage costs by 45% via Parquet format & intelligent tiering on ADLS Gen2.</p>
+      <div class="project-arch">
+        <span class="arch-node">SQL Server</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">ADF</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">ADLS Gen2</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Synapse</span>
+      </div>
+      <div class="project-tags">
+        <span class="tag">ADF</span><span class="tag">Synapse</span><span class="tag">Parquet</span><span class="tag">dbt</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">PROJECT_03</div>
+      <div class="project-title">IoT Telemetry Data Pipeline</div>
+      <p class="project-desc">Designed a scalable IoT data ingestion system for 10,000+ devices. Implemented anomaly detection with Databricks ML, alerting via Azure Monitor, and historical analytics via Synapse.</p>
+      <div class="project-arch">
+        <span class="arch-node">IoT Hub</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Stream Analytics</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Databricks</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Cosmos DB</span>
+      </div>
+      <div class="project-tags">
+        <span class="tag">IoT Hub</span><span class="tag">Stream Analytics</span><span class="tag">MLflow</span><span class="tag">Cosmos DB</span>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-num">PROJECT_04</div>
+      <div class="project-title">Automated Data Quality Framework</div>
+      <p class="project-desc">Built a reusable Great Expectations + Databricks framework for automated DQ checks across 50+ tables. Integrated with Azure DevOps CI/CD to prevent bad data from reaching production.</p>
+      <div class="project-arch">
+        <span class="arch-node">Databricks</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Great Expectations</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Azure DevOps</span>
+        <span class="arch-arrow">→</span>
+        <span class="arch-node">Teams Alerts</span>
+      </div>
+      <div class="project-tags">
+        <span class="tag">Great Expectations</span><span class="tag">CI/CD</span><span class="tag">Data Quality</span><span class="tag">Python</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <div class="section-num">04 / EXPERIENCE</div>
+    <h2>Work History</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2023 — NOW</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Senior Azure Data Engineer</div>
+        <div class="timeline-company">// TechCorp India · Hyderabad</div>
+        <ul class="timeline-desc">
+          <li>Architected Medallion Lakehouse on ADLS Gen2 processing 5TB+ monthly</li>
+          <li>Built 20+ ADF pipelines with custom monitoring and alerting</li>
+          <li>Led migration from on-prem DWH to Azure Synapse, 70% faster queries</li>
+          <li>Introduced dbt for SQL transformation, improving code reusability by 60%</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2021 — 2023</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Data Engineer</div>
+        <div class="timeline-company">// DataSolutions Ltd · Hyderabad</div>
+        <ul class="timeline-desc">
+          <li>Developed PySpark notebooks on Azure Databricks for ETL processing</li>
+          <li>Built real-time streaming pipelines using Event Hubs + Spark Structured Streaming</li>
+          <li>Created Power BI data models and DAX measures for business dashboards</li>
+          <li>Implemented row-level security and data governance using Azure Purview</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="timeline-item reveal">
+      <div class="timeline-date">2019 — 2021</div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-role">Junior Data Analyst</div>
+        <div class="timeline-company">// Analytics Hub · Hyderabad</div>
+        <ul class="timeline-desc">
+          <li>Wrote complex T-SQL queries and stored procedures for reporting</li>
+          <li>Built SSIS packages for data integration workflows</li>
+          <li>Designed Power BI dashboards for sales and operations teams</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-header reveal">
+    <div class="section-num">05 / CERTIFICATIONS</div>
+    <h2>Azure Badges</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="certs-grid">
+    <div class="cert-card reveal">
+      <div class="cert-badge-icon">🏅</div>
+      <div class="cert-name">DP-203: Azure Data Engineer Associate</div>
+      <div class="cert-issuer">Microsoft · 2023</div>
+      <div class="cert-status"><span style="width:6px;height:6px;background:#00FF88;border-radius:50%;display:inline-block;"></span>VERIFIED</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-badge-icon">🏅</div>
+      <div class="cert-name">AZ-900: Azure Fundamentals</div>
+      <div class="cert-issuer">Microsoft · 2022</div>
+      <div class="cert-status"><span style="width:6px;height:6px;background:#00FF88;border-radius:50%;display:inline-block;"></span>VERIFIED</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-badge-icon">🏅</div>
+      <div class="cert-name">Databricks Certified: Data Engineer Associate</div>
+      <div class="cert-issuer">Databricks · 2023</div>
+      <div class="cert-status"><span style="width:6px;height:6px;background:#00FF88;border-radius:50%;display:inline-block;"></span>VERIFIED</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-badge-icon">🎯</div>
+      <div class="cert-name">DP-300: Azure Database Administrator</div>
+      <div class="cert-issuer">Microsoft · In Progress</div>
+      <div class="cert-status"><span style="width:6px;height:6px;background:#FEBC2E;border-radius:50%;display:inline-block;"></span>IN PROGRESS</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-num reveal">06 / CONTACT</div>
+    <h2 class="reveal">Let's Build Together</h2>
+    <div class="section-line reveal" style="margin-bottom:2rem;"></div>
+    <p class="reveal">Open to senior Azure Data Engineer roles, consulting, and architecture reviews. Let's talk about your data challenges.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:shyam@email.com" class="contact-link">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        shyam@email.com
+      </a>
+      <a href="https://linkedin.com" class="contact-link" target="_blank">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com" class="contact-link" target="_blank">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+    <a href="mailto:shyam@email.com" class="btn-primary reveal" style="margin:0 auto;">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      Send Message
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Shyam · Azure Data Engineer</p>
+  <p class="footer-az">Built with 💙 for Azure</p>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx - 4 + 'px';
+    cursor.style.top = my - 4 + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // PIPELINE CANVAS
+  const canvas = document.getElementById('pipeline-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], nodes = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = init ? Math.random() * W : -10;
+      this.y = Math.random() * H;
+      this.vx = 0.5 + Math.random() * 1.5;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.size = 1.5 + Math.random() * 2;
+      this.alpha = 0.3 + Math.random() * 0.4;
+      this.color = Math.random() > 0.7 ? '#00B4FF' : '#0078D4';
+      this.trail = [];
+    }
+    update() {
+      this.trail.push({ x: this.x, y: this.y });
+      if (this.trail.length > 20) this.trail.shift();
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x > W + 10) this.reset(false);
+    }
+    draw() {
+      for (let i = 0; i < this.trail.length; i++) {
+        const a = (i / this.trail.length) * this.alpha * 0.5;
+        ctx.beginPath();
+        ctx.arc(this.trail[i].x, this.trail[i].y, this.size * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = this.color.replace(')', `, ${a})`).replace('rgb', 'rgba').replace('#00B4FF', `rgba(0,180,255,${a})`).replace('#0078D4', `rgba(0,120,212,${a})`);
+        ctx.fill();
+      }
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color === '#00B4FF' ? `rgba(0,180,255,${this.alpha})` : `rgba(0,120,212,${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+  // Static pipeline nodes
+  function createNodes() {
+    nodes = [];
+    const rows = 5, cols = 8;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        nodes.push({
+          x: (W / (cols + 1)) * (c + 1) + (Math.random() - 0.5) * 40,
+          y: (H / (rows + 1)) * (r + 1) + (Math.random() - 0.5) * 40,
+          alpha: 0.05 + Math.random() * 0.1
+        });
+      }
+    }
+  }
+  createNodes();
+  window.addEventListener('resize', createNodes);
+
+  function drawNodes() {
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, 3, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(0,180,255,${n.alpha})`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+      // connect nearby
+      nodes.forEach(m => {
+        const d = Math.hypot(n.x - m.x, n.y - m.y);
+        if (d < 120) {
+          ctx.beginPath();
+          ctx.moveTo(n.x, n.y);
+          ctx.lineTo(m.x, m.y);
+          ctx.strokeStyle = `rgba(0,120,212,${0.03 * (1 - d / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    drawNodes();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // TERMINAL TYPING
+  const lines = [
+    { text: '$ az login --service-principal', delay: 0 },
+    { text: '✓ Authenticated to Azure', class: 't-success', delay: 800 },
+    { text: '$ adf trigger start --name "daily_etl"', delay: 1600 },
+    { text: '✓ Pipeline run queued: run_20260502', class: 't-success', delay: 2400 },
+    { text: '$ databricks runs submit --json config.json', delay: 3200 },
+    { text: '✓ Spark job submitted: job_7823', class: 't-success', delay: 4000 },
+    { text: '$ python dbt_run.py --target prod', delay: 4800 },
+    { text: '✓ 47 models completed successfully', class: 't-success', delay: 5800 },
+    { text: '$ echo "Pipeline healthy 🚀"', delay: 6600 },
+    { text: 'Pipeline healthy 🚀', class: 't-success', delay: 7200 },
+  ];
+
+  const termOut = document.getElementById('terminal-output');
+  let lineIdx = 0;
+
+  function nextLine() {
+    if (lineIdx >= lines.length) return;
+    const l = lines[lineIdx];
+    setTimeout(() => {
+      const div = document.createElement('div');
+      div.className = l.class || '';
+      if (!l.class) {
+        div.innerHTML = `<span class="t-prompt">❯ </span><span class="t-cmd">${l.text.replace(/^\$ /, '')}</span>`;
+      } else {
+        div.textContent = l.text;
+      }
+      termOut.appendChild(div);
+      lineIdx++;
+      nextLine();
+    }, l.delay - (lines[lineIdx - 1]?.delay || 0));
+  }
+
+  setTimeout(nextLine, 1000);
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
 </body>
 </html>
